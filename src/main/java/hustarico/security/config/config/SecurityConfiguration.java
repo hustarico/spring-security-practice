@@ -7,12 +7,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
+import hustarico.security.config.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
+
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
@@ -26,7 +30,8 @@ public class SecurityConfiguration {
                             
             ).sessionManagement(
                 session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            );
+            ).authenticationProvider(authenticationProvider)
+            .addFilterBefore(jwtAuthenticationFilter, null);
             
 
 
